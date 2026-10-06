@@ -232,6 +232,7 @@ export const vi = {
     contactPrivacy: 'Thông tin liên hệ chỉ có trong phiên hỗ trợ đang hoạt động.',
     openSession: 'Mở phiên hỗ trợ',
     accept: 'Tôi muốn hỗ trợ',
+    loginToAccept: 'Đăng nhập vai trò Người hỗ trợ để nhận nhiệm vụ này và cùng đi qua từng giai đoạn.',
     acceptTitle: 'Bạn sẵn sàng nhận hỗ trợ?',
     acceptBody:
       'Bạn sẽ là người hỗ trợ duy nhất cho yêu cầu này. Hãy trao đổi với người đăng để thống nhất thời gian và công việc.',

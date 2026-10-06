@@ -1064,3 +1064,16 @@
     padding-inline: 14px;
   }
 }
+.journey-actions {
+  margin-top: 24px;
+  border-top: 1px solid #edf2ec;
+  padding-top: 22px;
+}
+.journey-actions .action-card {
+  box-shadow: none;
+  text-align: left;
+}
+.journey-actions .action-card .btn {
+  min-height: 48px;
+  font-size: 12px;
+}

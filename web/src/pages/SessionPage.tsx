@@ -68,6 +68,9 @@ export function SessionPage() {
               {vi.common.view}
               <ArrowUpRight size={16} />
             </Link>
+            <div className="journey-actions">
+              <RequestActions request={session.request} user={user} />
+            </div>
           </section>
           <RequestActions request={session.request} user={user} />
           <ReportButton targetType="User" id={session.counterpart.id} />

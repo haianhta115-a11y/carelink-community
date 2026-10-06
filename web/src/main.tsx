@@ -14,7 +14,6 @@ import './styles/chat.css';
 import './styles/reviews.css';
 import './styles/admin.css';
 import './styles/catalog.css';
-import { PreviewNotice } from './components/PreviewNotice';
 import './styles/polish.css';
 import './styles/accessibility.css';
 const Router = import.meta.env.VITE_ROUTER_MODE === 'hash' ? HashRouter : BrowserRouter;
@@ -28,7 +27,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <Router>
           <AuthProvider>
             <RealtimeProvider>
-              <PreviewNotice />
               <App />
               <Toaster richColors closeButton position="top-right" />
             </RealtimeProvider>

@@ -86,6 +86,9 @@ export function RequestDetailPage() {
                 ))}
               </div>
             )}
+            <div className="journey-actions">
+              <RequestActions request={request} user={user} />
+            </div>
           </section>
         </section>
         <aside className="detail-aside">

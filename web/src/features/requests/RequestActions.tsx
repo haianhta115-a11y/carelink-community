@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HandHeart, Play, CheckCheck } from 'lucide-react';
 import { toast } from 'sonner';
@@ -49,7 +49,21 @@ export function RequestActions({ request, user }: { request: SupportRequest; use
       void client.invalidateQueries({ queryKey: ['session'] });
     },
   });
-  if (!action)
+  if (!action) {
+    if (!user && request.status === 'Open' && !request.isHidden)
+      return (
+        <div className="panel action-card">
+          <HandHeart size={31} />
+          <p>{vi.requests.loginToAccept}</p>
+          <Link
+            className="btn btn-primary w-full"
+            to={`/login?returnTo=${encodeURIComponent(`/requests/${request.id}`)}`}
+          >
+            <HandHeart size={17} />
+            {vi.requests.accept}
+          </Link>
+        </div>
+      );
     return (
       <div className="panel action-card">
         <CheckCheck size={28} />
@@ -64,6 +78,7 @@ export function RequestActions({ request, user }: { request: SupportRequest; use
         </p>
       </div>
     );
+  }
   const label =
     action === 'accept' ? vi.requests.accept : action === 'start' ? vi.requests.start : vi.requests.complete;
   return (
