@@ -23,11 +23,13 @@ LUỒNG THỬ NHANH
 DỪNG LOCAL
 powershell -ExecutionPolicy Bypass -File .\scripts\stop-local.ps1
 
-PUBLIC GITHUB
+PUBLIC GITHUB (ĐÃ FIX ADMIN)
 https://haianhta115-a11y.github.io/carelink-community/
+Admin demo public: https://haianhta115-a11y.github.io/carelink-community/#/admin
+Đăng nhập demo: admin@carelink.vn / Admin@12345 (xem dashboard, users, requests, reports, audit, categories mẫu).
 Mã nguồn: https://github.com/haianhta115-a11y/carelink-community
-Giao diện được public bằng GitHub Pages. GitHub không chạy .NET/SQL Server.
-Theo lựa chọn chưa có hosting, chức năng đăng nhập/chat/quản trị đầy đủ đang chạy local.
+GitHub Pages không chạy .NET/SQL Server nên bản public dùng dữ liệu demo.
+Bản đầy đủ (đăng ký, chat realtime, SQL thật) chạy local ở trên.
 Để dùng nhiều người và chạy liên tục, triển khai backend HTTPS theo docs/DEPLOYMENT.md.
 
 Chi tiết cấu hình, kiểm thử, Docker và backup: README.md.

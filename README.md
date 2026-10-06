@@ -47,7 +47,7 @@ Trang đăng nhập có nút điền thông tin mẫu. Không dùng mật khẩu
 
 **Kho mã nguồn:** https://github.com/haianhta115-a11y/carelink-community
 
-GitHub Pages phục vụ giao diện tĩnh 24/24 theo khả năng sẵn sàng của dịch vụ GitHub. **GitHub Pages không chạy ASP.NET, SignalR hoặc SQL Server.** Theo lựa chọn hiện tại, người dùng chưa có hosting backend: bản Pages là bản giới thiệu giao diện, có thông báo rõ ràng; danh mục 45 lĩnh vực được dựng từ catalog, không giả lập đăng nhập và không công bố số liệu hoạt động giả.
+GitHub Pages phục vụ 24/24 theo khả năng sẵn sàng của dịch vụ GitHub. **GitHub Pages không chạy ASP.NET, SignalR hoặc SQL Server.** Bản public hiện tại là bản demo không cần backend: đăng nhập demo Admin `admin@carelink.vn` / `Admin@12345` để mở `/admin`, xem dashboard, tài khoản, yêu cầu, báo cáo, audit và danh mục mẫu. Thêm/sửa danh mục và các thao tác ghi khác bị chặn có thông báo rõ ràng. Dữ liệu demo không phải dữ liệu thật. Bản đầy đủ (đăng ký, chat realtime, SQL Server) chạy local theo hướng dẫn bên dưới.
 
 Khi có backend HTTPS, build với `VITE_API_URL=https://YOUR_API_HOST`; đặt CORS origin bằng địa chỉ Pages. Xem **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** để triển khai API + SQL Server với Docker và HTTPS. Main và Admin dùng cùng backend được phân quyền; frontend Admin không có secret đặc biệt.
 
