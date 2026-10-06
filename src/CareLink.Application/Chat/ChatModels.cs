@@ -1,0 +1,10 @@
+using CareLink.Application.Auth;
+using CareLink.Application.Requests;
+using CareLink.Domain;
+namespace CareLink.Application.Chat;
+public sealed record SessionSummaryDto(Guid Id, Guid RequestId, string RequestTitle, RequestStatus RequestStatus, SessionStatus Status, PublicUserDto Counterpart, string? LastMessage, DateTime? LastMessageAt, int UnreadCount, DateTime CreatedAt);
+public sealed record SessionDto(Guid Id, SessionStatus Status, RequestDto Request, PublicUserDto Counterpart, string? CounterpartPhone, string? CounterpartAddress, DateTime CreatedAt);
+public sealed record MessageDto(long Id, Guid SessionId, Guid SenderId, string SenderName, string? SenderAvatarUrl, string? Content, string? ImageUrl, DateTime SentAt, DateTime? ReadAt);
+public sealed record MessagePageDto(List<MessageDto> Items, long? NextCursor, bool HasMore);
+public sealed record SendMessageInput(string? Content, bool HasImage);
+public sealed record SessionAccess(Guid Id, Guid RequestId, Guid RequesterId, Guid HelperId, SessionStatus Status, bool IsHidden);

@@ -1,0 +1,4 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup><ProjectReference Include="../CareLink.Domain/CareLink.Domain.csproj" /></ItemGroup>
+  <ItemGroup><PackageReference Include="FluentValidation.DependencyInjectionExtensions" /></ItemGroup>
+</Project>

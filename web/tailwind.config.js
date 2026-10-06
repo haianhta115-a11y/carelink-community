@@ -1,0 +1,1 @@
+export default { content: ['./index.html', './src/**/*.{ts,tsx}'], theme: { extend: { colors: { primary: 'var(--primary)' }, fontFamily: { sans: ['Be Vietnam Pro', 'system-ui', 'sans-serif'] } } }, plugins: [] };

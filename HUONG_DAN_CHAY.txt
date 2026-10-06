@@ -1,0 +1,31 @@
+CARELINK - HƯỚNG DẪN CHẠY
+
+1. Mở PowerShell trong folder dự án.
+2. Chạy:
+   powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\start-local.ps1 -OpenBrowser
+
+TRANG CHÍNH: http://localhost:5173
+TRANG ADMIN: http://localhost:5173/admin
+SWAGGER API: http://localhost:5080/swagger
+
+TÀI KHOẢN DEMO
+Người cần hỗ trợ: requester1@carelink.vn / Demo@12345
+Người hỗ trợ: helper1@carelink.vn / Demo@12345
+Quản trị: admin@carelink.vn / Admin@12345
+
+LUỒNG THỬ NHANH
+- Đăng nhập Requester, tạo một yêu cầu.
+- Mở trình duyệt/phiên riêng cho Helper, tìm yêu cầu và nhận hỗ trợ.
+- Helper bắt đầu hỗ trợ; hai bên nhắn tin và gửi ảnh.
+- Requester xác nhận hoàn thành và đánh giá.
+- Admin xem dashboard, lĩnh vực, tài khoản, yêu cầu, báo cáo và nhật ký.
+
+DỪNG LOCAL
+powershell -ExecutionPolicy Bypass -File .\scripts\stop-local.ps1
+
+PUBLIC GITHUB
+Giao diện được public bằng GitHub Pages. GitHub không chạy .NET/SQL Server.
+Theo lựa chọn chưa có hosting, chức năng đăng nhập/chat/quản trị đầy đủ đang chạy local.
+Để dùng nhiều người và chạy liên tục, triển khai backend HTTPS theo docs/DEPLOYMENT.md.
+
+Chi tiết cấu hình, kiểm thử, Docker và backup: README.md.

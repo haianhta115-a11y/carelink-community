@@ -1,0 +1,11 @@
+# Cấu hình PUBLIC_HOST bằng hostname API; reverse proxy tới API nội bộ.
+{$PUBLIC_HOST} {
+    encode gzip zstd
+    reverse_proxy api:8080
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options DENY
+        Referrer-Policy strict-origin-when-cross-origin
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    }
+}

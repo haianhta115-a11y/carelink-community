@@ -1,0 +1,47 @@
+import { test, expect, type Page } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
+import { vi } from '../src/locales/vi';
+test('AT-11 and full community workflow including chat images, review and moderation', async ({ browser, page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.goto('/'); await expect(page.getByRole('heading', { level: 1 })).toContainText(vi.landing.headline1);
+  await page.getByRole('button', { name: vi.catalog.showAll }).click(); await expect(page.locator('.expanded-catalog .category-card')).toHaveCount(45);
+  for (const width of [360, 768, 1280]) {
+    await page.setViewportSize({ width, height: 900 });
+    await expect.poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy();
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.screenshot({ path: `../artifacts/landing-${width}.png`, fullPage: true });
+  }
+  await page.setViewportSize({ width: 1280, height: 900 });
+  const accessibility = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
+  expect(accessibility.violations.map(violation => ({ id: violation.id, nodes: violation.nodes.map(node => node.target) }))).toEqual([]);
+  const requester = page; const helperContext = await browser.newContext({ viewport: { width: 1280, height: 900 } }); const helper = await helperContext.newPage(); const adminContext = await browser.newContext({ viewport: { width: 1280, height: 900 } }); const admin = await adminContext.newPage();
+  helper.on('pageerror', error => errors.push(error.message)); admin.on('pageerror', error => errors.push(error.message));
+  const email = `e2e${Date.now()}@example.vn`, password = 'Test@12345';
+  await requester.goto('/register?role=Requester'); await requester.getByLabel(vi.common.fullName, { exact: true }).fill('Người dùng kiểm thử trình duyệt'); await requester.getByLabel(vi.common.email, { exact: true }).fill(email); await requester.locator('#password').fill(password); await requester.locator('#confirmPassword').fill(password); await requester.getByRole('button', { name: vi.auth.registerButton, exact: true }).click(); await expect(requester).toHaveURL(/\/login/);
+  async function login(target: Page, address: string, secret: string) { await target.goto('/login'); await target.getByLabel(vi.common.email, { exact: true }).fill(address); await target.locator('#password').fill(secret); await target.getByRole('button', { name: vi.nav.login, exact: true }).click(); await expect(target).not.toHaveURL(/\/login/); }
+  await login(requester, email, password);
+  await requester.goto('/requests/new'); const title = `Hỗ trợ tin học kiểm thử ${Date.now()}`;
+  await requester.getByLabel(vi.requests.titleLabel).fill(title); await requester.getByLabel(vi.requests.category, { exact: true }).selectOption('16'); await requester.getByLabel(vi.requests.locationLabel).fill('Hà Nội, Cầu Giấy'); await requester.getByLabel(vi.requests.descriptionLabel).fill('Mong tìm một bạn có thể hướng dẫn sử dụng máy tính cơ bản và các thao tác phục vụ học tập. Thời gian sẽ được trao đổi riêng.'); await requester.getByRole('button', { name: vi.requests.publish, exact: true }).click(); await expect(requester).toHaveURL(/\/requests\/[a-f0-9-]+$/); const requestId = new URL(requester.url()).pathname.split('/').at(-1)!;
+  await login(helper, 'helper1@carelink.vn', 'Demo@12345'); await helper.getByRole('textbox', { name: vi.requests.keyword }).fill(title); await expect(helper.locator('.request-card')).toHaveCount(1); await helper.getByRole('heading', { name: title, exact: true }).click(); await helper.getByRole('button', { name: vi.requests.accept, exact: true }).click(); await helper.getByRole('dialog').getByRole('button', { name: vi.requests.accept, exact: true }).click(); await expect(helper).toHaveURL(/\/sessions\/[a-f0-9-]+$/); const sessionId = new URL(helper.url()).pathname.split('/').at(-1)!;
+  await requester.goto(`/sessions/${sessionId}`); await expect(helper.getByText(vi.chat.connected, { exact: true })).toBeVisible(); await helper.getByRole('button', { name: vi.requests.start, exact: true }).click(); await expect(requester.getByRole('button', { name: vi.requests.complete, exact: true })).toBeVisible();
+  await helper.getByRole('textbox', { name: vi.chat.messageLabel }).fill('Chào bạn, mình sẽ hỗ trợ vào chiều mai nhé!'); await helper.getByRole('textbox', { name: vi.chat.messageLabel }).press('Enter'); await expect(requester.getByText('Chào bạn, mình sẽ hỗ trợ vào chiều mai nhé!', { exact: true })).toBeVisible(); await requester.bringToFront();
+  await requester.getByRole('textbox', { name: vi.chat.messageLabel }).fill('Cảm ơn bạn, mình sẽ chuẩn bị máy tính.'); await requester.getByRole('textbox', { name: vi.chat.messageLabel }).press('Enter'); await expect(helper.getByText('Cảm ơn bạn, mình sẽ chuẩn bị máy tính.', { exact: true })).toBeVisible();
+  await helper.locator('input[type="file"]').setInputFiles({ name: 'anh-minh-hoa.png', mimeType: 'image/png', buffer: Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/bWQAAAAASUVORK5CYII=', 'base64') }); await helper.getByRole('button', { name: vi.common.send, exact: true }).click(); await expect(requester.locator('.message-image')).toBeVisible(); await requester.screenshot({ path: '../artifacts/chat-desktop.png', fullPage: true });
+  await requester.getByRole('button', { name: vi.requests.complete, exact: true }).click(); await requester.getByRole('dialog').getByRole('button', { name: vi.requests.complete, exact: true }).click(); await expect(requester.getByText(vi.chat.closed, { exact: true })).toBeVisible(); await requester.getByLabel(vi.review.comment).fill('Bạn nhiệt tình và hướng dẫn rõ ràng. Cảm ơn bạn rất nhiều!'); await requester.getByRole('button', { name: vi.review.send, exact: true }).click(); await expect(requester.getByText('Bạn nhiệt tình và hướng dẫn rõ ràng. Cảm ơn bạn rất nhiều!', { exact: true })).toBeVisible();
+  await login(admin, 'admin@carelink.vn', 'Admin@12345');
+  const layouts = [
+    { target: requester, routes: ['/my-requests', '/requests/new', '/profile', `/requests/${requestId}`, '/sessions', `/sessions/${sessionId}`], role: 'requester' },
+    { target: helper, routes: ['/requests', '/my-jobs', `/sessions/${sessionId}`], role: 'helper' },
+    { target: admin, routes: ['/admin', '/admin/users', '/admin/requests', '/admin/categories', '/admin/reports', '/admin/audit'], role: 'admin' },
+  ];
+  for (const layout of layouts) for (const width of [360, 768, 1280]) {
+    await layout.target.setViewportSize({ width, height: 900 });
+    for (const route of layout.routes) { await layout.target.goto(route); await expect(layout.target.locator('h1').first()).toBeVisible(); await expect.poll(() => layout.target.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBeTruthy(); }
+    await layout.target.screenshot({ path: `../artifacts/${layout.role}-${width}.png`, fullPage: true });
+  }
+  await requester.setViewportSize({ width: 1280, height: 900 }); await requester.goto(`/requests/${requestId}`); await requester.getByRole('button', { name: vi.reports.reportRequest, exact: true }).click(); await requester.getByLabel(vi.reports.description).fill('Báo cáo kiểm thử: nhờ xác nhận quy trình xử lý nội dung.'); await requester.getByRole('button', { name: vi.reports.send, exact: true }).click(); await expect(requester.getByRole('dialog')).toHaveCount(0);
+  await admin.setViewportSize({ width: 1280, height: 900 }); await admin.goto(`/admin/reports?keyword=${encodeURIComponent(title)}`); await admin.getByRole('link', { name: vi.admin.process, exact: true }).click(); await admin.getByLabel(vi.admin.adminNote).fill('Đã bắt đầu kiểm tra nội dung theo quy trình.'); await admin.getByRole('button', { name: vi.admin.saveProcessing, exact: true }).click(); await admin.getByRole('dialog').getByRole('button', { name: vi.admin.saveProcessing, exact: true }).click(); await expect(admin.getByText(vi.reports.statuses.Reviewing, { exact: true }).first()).toBeVisible(); await admin.getByLabel(vi.admin.adminNote).fill('Đã kiểm tra, nội dung hợp lệ. Báo cáo được giải quyết.'); await admin.getByRole('button', { name: vi.admin.saveProcessing, exact: true }).click(); await admin.getByRole('dialog').getByRole('button', { name: vi.admin.saveProcessing, exact: true }).click(); await expect(admin.getByText(vi.admin.reportClosed, { exact: true })).toBeVisible();
+  await admin.goto(`/admin/users?keyword=${encodeURIComponent(email)}`); await admin.getByRole('button', { name: vi.admin.lock, exact: true }).click(); await admin.getByLabel(vi.admin.reason, { exact: true }).fill('Khóa tài khoản thử để kiểm tra thu hồi phiên.'); await admin.getByRole('dialog').getByRole('button', { name: vi.admin.lock, exact: true }).click(); await expect(requester).toHaveURL(/\/login/); await admin.getByRole('button', { name: vi.admin.unlock, exact: true }).click(); await admin.getByLabel(vi.admin.reason, { exact: true }).fill('Hoàn tất kiểm thử, mở lại tài khoản.'); await admin.getByRole('dialog').getByRole('button', { name: vi.admin.unlock, exact: true }).click(); await expect(admin.getByRole('button', { name: vi.admin.lock, exact: true })).toBeVisible();
+  expect(errors).toEqual([]); await helperContext.close(); await adminContext.close();
+});

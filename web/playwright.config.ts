@@ -1,0 +1,2 @@
+import { defineConfig } from '@playwright/test';
+export default defineConfig({ testDir: './e2e', fullyParallel: false, workers: 1, timeout: 300000, expect: { timeout: 15000 }, use: { baseURL: process.env.CARELINK_WEB_URL ?? 'http://localhost:5173', channel: 'chrome', headless: true, viewport: { width: 1280, height: 900 }, screenshot: 'only-on-failure' }, outputDir: '../artifacts/playwright', reporter: [['list'], ['json', { outputFile: '../artifacts/e2e-results.json' }]] });
