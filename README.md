@@ -47,7 +47,7 @@ Trang đăng nhập có nút điền thông tin mẫu. Không dùng mật khẩu
 
 **Kho mã nguồn:** https://github.com/haianhta115-a11y/carelink-community
 
-GitHub Pages phục vụ 24/24 theo khả năng sẵn sàng của dịch vụ GitHub. **GitHub Pages không chạy ASP.NET, SignalR hoặc SQL Server.** Bản public hiện tại là bản demo không cần backend: đăng nhập demo Admin `admin@carelink.vn` / `Admin@12345` để mở `/admin`, xem dashboard, tài khoản, yêu cầu, báo cáo, audit và danh mục mẫu. Thêm/sửa danh mục và các thao tác ghi khác bị chặn có thông báo rõ ràng. Dữ liệu demo không phải dữ liệu thật. Bản đầy đủ (đăng ký, chat realtime, SQL Server) chạy local theo hướng dẫn bên dưới.
+GitHub Pages phục vụ 24/24 theo khả năng sẵn sàng của dịch vụ GitHub. **GitHub Pages không chạy ASP.NET, SignalR hoặc SQL Server.** Bản public chạy đầy đủ như thật trên trình duyệt (dữ liệu lưu ở trình duyệt của bạn): tự đăng ký tài khoản, đăng yêu cầu, nhận việc, chat, xác nhận hoàn thành, đánh giá, báo cáo; Admin `admin@carelink.vn` / `Admin@12345` mở `/admin` để xem dashboard, tài khoản, yêu cầu, báo cáo, audit và danh mục. Thêm/sửa danh mục bị chặn có thông báo rõ ràng. Bản đầy đủ nhiều người dùng chung một cơ sở dữ liệu (đăng ký, chat realtime, SQL Server) chạy local theo hướng dẫn bên dưới.
 
 Khi có backend HTTPS, build với `VITE_API_URL=https://YOUR_API_HOST`; đặt CORS origin bằng địa chỉ Pages. Xem **[docs/DEPLOYMENT.md](docs/DEPLOYMENT.md)** để triển khai API + SQL Server với Docker và HTTPS. Main và Admin dùng cùng backend được phân quyền; frontend Admin không có secret đặc biệt.
 
