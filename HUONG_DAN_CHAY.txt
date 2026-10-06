@@ -24,6 +24,8 @@ DỪNG LOCAL
 powershell -ExecutionPolicy Bypass -File .\scripts\stop-local.ps1
 
 PUBLIC GITHUB
+https://haianhta115-a11y.github.io/carelink-community/
+Mã nguồn: https://github.com/haianhta115-a11y/carelink-community
 Giao diện được public bằng GitHub Pages. GitHub không chạy .NET/SQL Server.
 Theo lựa chọn chưa có hosting, chức năng đăng nhập/chat/quản trị đầy đủ đang chạy local.
 Để dùng nhiều người và chạy liên tục, triển khai backend HTTPS theo docs/DEPLOYMENT.md.

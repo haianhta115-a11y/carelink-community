@@ -43,7 +43,9 @@ Trang đăng nhập có nút điền thông tin mẫu. Không dùng mật khẩu
 
 ## Public bằng GitHub
 
-Kho mã nguồn dự kiến: `https://github.com/haianhta115-a11y/carelink-community`.
+**Website public:** https://haianhta115-a11y.github.io/carelink-community/
+
+**Kho mã nguồn:** https://github.com/haianhta115-a11y/carelink-community
 
 GitHub Pages phục vụ giao diện tĩnh 24/24 theo khả năng sẵn sàng của dịch vụ GitHub. **GitHub Pages không chạy ASP.NET, SignalR hoặc SQL Server.** Theo lựa chọn hiện tại, người dùng chưa có hosting backend: bản Pages là bản giới thiệu giao diện, có thông báo rõ ràng; danh mục 45 lĩnh vực được dựng từ catalog, không giả lập đăng nhập và không công bố số liệu hoạt động giả.
 
@@ -80,6 +82,15 @@ npm run test:e2e
 ```
 
 Playwright dùng Chrome đã cài; chạy `start-local.ps1` trước. Kết quả/ảnh chụp nằm ở `artifacts/`. Kiểm thử backend bao phủ AT-01..AT-10, AT-12..AT-15; AT-11 được kiểm tra bằng Playwright ở 360/768/1280px. Ma trận: **[docs/TRACEABILITY.md](docs/TRACEABILITY.md)**.
+
+### Kết quả thực tế ngày 06/10/2026
+
+- Backend: **18 tests pass** trên SQL Server 2022 thật; build **0 warnings / 0 errors**.
+- Frontend: **9 Vitest tests pass**, production build pass, **ESLint 0 errors / 0 warnings**.
+- Chrome Playwright: **2 tests pass** trong 46,3 giây: luồng đầy đủ (đăng ký, tạo/tìm/nhận yêu cầu, bắt đầu, text/ảnh, hoàn thành, đánh giá, báo cáo và Admin khóa/mở khóa) và kiểm tra GitHub Pages thật.
+- 360/768/1280px: landing và 15 trang nghiệp vụ của Requester/Helper/Admin được kiểm tra, **không tràn ngang**.
+- Axe trên landing đầy đủ 45 lĩnh vực: **0 vi phạm WCAG 2 A/AA và 2.1 AA được công cụ phát hiện**. Đây là kết quả tự động trên trang đã kiểm tra, không phải chứng nhận accessibility cho toàn bộ hệ thống.
+- GitHub Pages build/deployment thành công, website và catalog trả **HTTP 200**; ảnh local, 45 lĩnh vực và hash route `/login` đã được mở bằng trình duyệt thật.
 
 ## Kiến trúc và quy ước
 
