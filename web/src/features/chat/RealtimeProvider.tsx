@@ -3,6 +3,7 @@ import { HubConnectionBuilder, LogLevel, HttpError } from '@microsoft/signalr';
 import { useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../auth/AuthProvider';
 import { readAuth } from '../../lib/auth-storage';
+import { publicPreview } from '../../api/public-preview';
 type ConnectionStatus = 'connected' | 'reconnecting' | 'disconnected';
 const RealtimeContext = createContext<ConnectionStatus>('disconnected');
 export function RealtimeProvider({ children }: { children: ReactNode }) {
@@ -10,6 +11,10 @@ export function RealtimeProvider({ children }: { children: ReactNode }) {
   const client = useQueryClient();
   const [status, setStatus] = useState<ConnectionStatus>('disconnected');
   useEffect(() => {
+    if (publicPreview) {
+      setStatus('disconnected');
+      return;
+    }
     if (!auth?.token) {
       setStatus('disconnected');
       return;
