@@ -113,7 +113,7 @@ interface CatalogItem {
   description: string;
 }
 
-const DB_KEY = 'carelink-preview-db-v3';
+const DB_KEY = 'carelink-preview-db-v4';
 const DEMO_SESSION_2 = 'preview-session-demo-2';
 let catalogCache: CatalogItem[] | null = null;
 
@@ -167,7 +167,7 @@ function seedDb(): DemoDB {
     { id: previewAdmin.id, email: previewAdmin.email, fullName: previewAdmin.fullName, role: 'Admin', status: 'Active', phone: null, address: null, createdAt: now, passwordHash: demoHash('Admin@12345'), lockedReason: null, avatarDataUrl: null },
     { id: previewRequester.id, email: previewRequester.email, fullName: previewRequester.fullName, role: 'Requester', status: 'Active', phone: previewRequester.phone, address: previewRequester.address, createdAt: now, passwordHash: demoHash('Demo@12345'), lockedReason: null, avatarDataUrl: null },
     { id: previewHelper.id, email: previewHelper.email, fullName: previewHelper.fullName, role: 'Helper', status: 'Active', phone: previewHelper.phone, address: previewHelper.address, createdAt: now, passwordHash: demoHash('Demo@12345'), lockedReason: null, avatarDataUrl: null },
-    { id: previewUsers[3].id, email: previewUsers[3].email, fullName: previewUsers[3].fullName, role: 'Helper', status: 'Locked', phone: null, address: null, createdAt: now, passwordHash: demoHash('Demo@12345'), lockedReason: 'Demo: vi phạm quy định cộng đồng.', avatarDataUrl: null },
+    { id: previewUsers[3].id, email: previewUsers[3].email, fullName: previewUsers[3].fullName, role: 'Helper', status: 'Locked', phone: null, address: null, createdAt: now, passwordHash: demoHash('Demo@12345'), lockedReason: 'Vi phạm quy định cộng đồng.', avatarDataUrl: null },
   ];
   const requests: DemoRequest[] = previewRequests.map((r, i) =>
     i === 0
@@ -184,7 +184,7 @@ function seedDb(): DemoDB {
     users, requests,
     messages: {
       [DEMO_SESSION_2]: [
-        { id: 1, sessionId: DEMO_SESSION_2, senderId: previewHelper.id, senderName: previewHelper.fullName, senderAvatarUrl: null, content: 'Chào bạn, mình đã nhận hỗ trợ demo. Hai bên thống nhất thời gian giúp mình nhé!', imageUrl: null, sentAt: now, readAt: null },
+        { id: 1, sessionId: DEMO_SESSION_2, senderId: previewHelper.id, senderName: previewHelper.fullName, senderAvatarUrl: null, content: 'Chào bạn, mình đã nhận hỗ trợ. Hai bên thống nhất thời gian giúp mình nhé!', imageUrl: null, sentAt: now, readAt: null },
       ],
     },
     reviews: {},
@@ -575,7 +575,7 @@ export const previewAdapter: AxiosAdapter = async (config) => {
       req.helperId = me.id;
       req.sessionId = req.sessionId ?? `preview-session-${req.id.slice(0, 8)}`;
       req.updatedAt = now;
-      addAudit(db, me, 'REQUEST_STATUS_CHANGED', 'SupportRequest', req.id, 'Open', 'Accepted', 'Nhận hỗ trợ demo.');
+      addAudit(db, me, 'REQUEST_STATUS_CHANGED', 'SupportRequest', req.id, 'Open', 'Accepted', 'Nhận hỗ trợ yêu cầu.');
       saveDb(db);
       return ok(config, { sessionId: req.sessionId, requestId: req.id });
     }
@@ -584,7 +584,7 @@ export const previewAdapter: AxiosAdapter = async (config) => {
       if (req.status !== 'Accepted') return fail(config, 409, 'INVALID_TRANSITION', vi.errors.INVALID_TRANSITION);
       req.status = 'InProgress';
       req.updatedAt = now;
-      addAudit(db, me, 'REQUEST_STATUS_CHANGED', 'SupportRequest', req.id, 'Accepted', 'InProgress', 'Bắt đầu hỗ trợ demo.');
+      addAudit(db, me, 'REQUEST_STATUS_CHANGED', 'SupportRequest', req.id, 'Accepted', 'InProgress', 'Bắt đầu hỗ trợ.');
       saveDb(db);
       return ok(config, toRequestDto(db, req));
     }
@@ -596,7 +596,7 @@ export const previewAdapter: AxiosAdapter = async (config) => {
     if (req.status !== 'InProgress') return fail(config, 409, 'INVALID_TRANSITION', vi.errors.INVALID_TRANSITION);
     req.status = 'Completed';
     req.updatedAt = now;
-    addAudit(db, me, 'REQUEST_STATUS_CHANGED', 'SupportRequest', req.id, 'InProgress', 'Completed', 'Xác nhận hoàn thành demo.');
+    addAudit(db, me, 'REQUEST_STATUS_CHANGED', 'SupportRequest', req.id, 'InProgress', 'Completed', 'Xác nhận hoàn thành.');
     saveDb(db);
     return ok(config, toRequestDto(db, req));
   }
@@ -695,7 +695,7 @@ export const previewAdapter: AxiosAdapter = async (config) => {
     if (!content && !hasImage) return fail(config, 400, 'VALIDATION_ERROR', vi.errors.VALIDATION_ERROR);
     if (content.length > 2000) return fail(config, 400, 'VALIDATION_ERROR', vi.errors.VALIDATION_ERROR);
     db.seq += 1;
-    const message: PreviewMessage = { id: db.seq, sessionId: msgListMatch[1], senderId: me.id, senderName: me.fullName, senderAvatarUrl: me.avatarDataUrl ? `/api/users/${me.id}/avatar` : null, content: content || '(Đã gửi 1 ảnh demo)', imageUrl: null, sentAt: new Date().toISOString(), readAt: null };
+    const message: PreviewMessage = { id: db.seq, sessionId: msgListMatch[1], senderId: me.id, senderName: me.fullName, senderAvatarUrl: me.avatarDataUrl ? `/api/users/${me.id}/avatar` : null, content: content || '(Đã gửi 1 ảnh)', imageUrl: null, sentAt: new Date().toISOString(), readAt: null };
     (db.messages[msgListMatch[1]] ??= []).push(message);
     saveDb(db);
     return ok(config, message);
@@ -920,7 +920,7 @@ export const previewAdapter: AxiosAdapter = async (config) => {
   }
 
   if ((path === '/admin/categories' && method === 'post') || (path.startsWith('/admin/categories/') && method === 'put')) {
-    return fail(config, 400, 'VALIDATION_ERROR', 'Bản public demo chỉ xem danh mục. Hãy chạy local để thêm/sửa lĩnh vực.');
+    return fail(config, 400, 'VALIDATION_ERROR', 'Danh mục chỉ xem trên bản web này. Hãy chạy bản đầy đủ trên máy tính để thêm/sửa lĩnh vực.');
   }
 
   return fail(config, 503, 'BACKEND_UNAVAILABLE', vi.catalog.backendPending);

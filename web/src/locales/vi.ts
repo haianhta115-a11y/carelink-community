@@ -63,10 +63,7 @@ export const vi = {
     nameInvalid: 'Tên lĩnh vực cần từ 2 đến 80 ký tự.',
     slugInvalid: 'Dùng chữ thường, số và dấu gạch nối.',
     descriptionInvalid: 'Mô tả cần từ 10 đến 200 ký tự.',
-    publicPreview: 'Bản public demo',
-    demoAdminHint:
-      'Đăng nhập demo Admin: admin@carelink.vn / Admin@12345 để mở khu quản trị. Dữ liệu là demo, không phải dữ liệu thật.',
-    backendPending: 'Bản đầy đủ chạy local với .NET + SQL Server theo HUONG_DAN_CHAY.txt.',
+    backendPending: 'Bản đầy đủ chạy trên máy tính với .NET + SQL Server theo HUONG_DAN_CHAY.txt.',
     localLink: 'Xem hướng dẫn chạy đầy đủ',
   },
   nav: {
@@ -271,7 +268,7 @@ export const vi = {
     FILE_INVALID: 'Ảnh chưa hợp lệ. Vui lòng chọn JPEG, PNG hoặc WebP đúng giới hạn dung lượng.',
     RATE_LIMITED: 'Bạn thao tác quá nhanh. Vui lòng chờ một phút rồi thử lại.',
     INTERNAL_ERROR: 'Hệ thống gặp sự cố. Vui lòng thử lại sau.',
-    BACKEND_UNAVAILABLE: 'Chức năng này cần backend local. Trên bản public, hãy dùng tài khoản demo Admin để xem khu quản trị.',
+    BACKEND_UNAVAILABLE: 'Chức năng này chưa khả dụng trên bản web. Vui lòng chạy bản đầy đủ trên máy tính.',
   },
   landing: {
     eyebrow: 'MỘT KẾT NỐI NHỎ. MỘT THAY ĐỔI LỚN.',
